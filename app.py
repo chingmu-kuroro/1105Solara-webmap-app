@@ -12,7 +12,7 @@ my_routes = [
 
 # --- 3. 定義主佈局 (Layout)，包含導覽 ---
 @solara.component
-def Layout(main_content):
+def Layout(children):
     router = solara.use_router() # 取得路由控制器
 
     # a. 使用 solara.AppLayout 作為根容器
@@ -34,8 +34,8 @@ def Layout(main_content):
                         text=True,
                     )
                         
-        # d. 關鍵：將 main_content (您的頁面) 放置在 AppLayout 的「主要內容區域」
-        main_content
+        # d. 將 Router 傳入的頁面內容 (children) 放置在 AppLayout 的主要區域
+        children
     
     # e. 回傳「整個」佈局
     return main
@@ -44,5 +44,5 @@ def Layout(main_content):
 @solara.component
 def Page():
     # Router 會自動根據 routes 列表，將當前 URL 對應的 component
-    # 渲染為 main_content，並傳遞給 Layout
+    # 渲染為 children，並傳遞給 Layout
     return solara.Router(routes=my_routes, layout=Layout)
