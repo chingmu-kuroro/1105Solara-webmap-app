@@ -20,7 +20,7 @@ def Layout(children):
     with solara.AppLayout() as main:
         
         # b. 這個 AppBar 會被「傳送」到 AppLayout 的頂部插槽
-        with solara.AppBar(color="primary"):
+        with solara.AppBar():
             solara.Markdown("### 🌍 我的 Solara GIS App (台灣)")
         
         # c. 這個 Sidebar 會被「傳送」到 AppLayout 的側邊插槽
