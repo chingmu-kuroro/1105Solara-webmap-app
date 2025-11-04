@@ -26,13 +26,12 @@ def Layout(children):
         # c. 這個 Sidebar 會被「傳送」到 AppLayout 的側邊插槽
         with solara.Sidebar():
             solara.Markdown("## 導覽選單")
-            with solara.ButtonGroup(vertical=True):
-                for route in my_routes:
-                    solara.Button(
-                        label=route.label,
-                        on_click=lambda r=route: router.push(r.path), 
-                        text=True,
-                    )
+            for route in my_routes:
+                solara.Button(
+                    label=route.label,
+                    on_click=lambda r=route: router.push(r.path), 
+                    text=True,
+                )
                         
         # d. 將 Router 傳入的頁面內容 (children) 放置在 AppLayout 的主要區域
         children
