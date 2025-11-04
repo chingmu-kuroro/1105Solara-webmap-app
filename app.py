@@ -15,19 +15,30 @@ routes = [
 def Layout(main_content):
     router = solara.use_router() # 取得路由控制器
 
-    with solara.AppBar(color="primary"):
-        solara.Markdown("### 🌍 我的 Solara GIS App (台灣)")
-    with solara.Sidebar():
-        solara.Markdown("## 導覽選單")
-        # --- 手動建立導覽按鈕 ---
-        with solara.ButtonGroup(vertical=True):
-            for route in routes:
-                solara.Button(
-                    label=route.label,
-                    on_click=lambda r=route: router.push(r.path), # 點擊時跳轉
-                    text=True,
-                )
-    return main_content # 顯示目前 URL 對應的主內容
+    # 1. 使用 solara.AppLayout 作為根容器
+    #    它會自動提供 AppBar 和 Sidebar 所需的「插槽」
+    with solara.AppLayout() as main:
+        
+        # 2. 這個 AppBar 會被「傳送」到 AppLayout 的頂部插槽
+        with solara.AppBar(color="primary"):
+            solara.Markdown("### 🌍 我的 Solara GIS App (台灣)")
+        
+        # 3. 這個 Sidebar 會被「傳送」到 AppLayout 的側邊插槽
+        with solara.Sidebar():
+            solara.Markdown("## 導覽選單")
+            with solara.ButtonGroup(vertical=True):
+                for route in routes:
+                    solara.Button(
+                        label=route.label,
+                        on_click=lambda r=route: router.push(r.path), 
+                        text=True,
+                    )
+                        
+        # 4. 關鍵：將 main_content (您的頁面) 放置在 AppLayout 的「主要內容區域」
+        main_content
+    
+    # 5. 回傳「整個」佈局
+    return main
 
 # --- 4. 建立 App ---
 @solara.component
