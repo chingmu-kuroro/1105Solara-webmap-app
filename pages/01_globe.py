@@ -41,7 +41,10 @@ def Page():
         )
         
         # --- 4. 加入台北捷運路網 (向量) ---
-        mrt_url = "https://drive.google.com/file/d/1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX/view?usp=sharing"
+        # 共用連結：https://drive.google.com/file/d/1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX/view?usp=sharing
+        # FILE_ID = "1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
+        # 原始 (Raw)檔案的 URL："https://drive.google.com/uc?id=1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
+        mrt_url = "https://drive.google.com/uc?id=1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
         
         # (使用 add_geojson 是可以的，因為這個輕量物件也有這個輔助函式)
         paint = {"line-color": "#FFD700", "line-width": 3}
