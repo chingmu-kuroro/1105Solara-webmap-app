@@ -10,7 +10,6 @@ def create_map():
         right_layer="NLCD 2016 CONUS Land Cover",
         left_label="2001",
         right_label="2016",
-        center=[36.1, -114.9],
         zoom=10,
         )
     return m
