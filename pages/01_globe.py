@@ -16,7 +16,7 @@ def create_map():
     )
     m.add_basemap("Satellite", visible=False)
     m.add_overture_3d_buildings(template="simple")
-    lines_url = "https://github.com/opengeos/datasets/releases/download/vector/cables.geojson"
+    lines_url = "https://drive.google.com/uc?id=1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
     m.add_geojson(lines_url, name="Lines")
 
     return m
