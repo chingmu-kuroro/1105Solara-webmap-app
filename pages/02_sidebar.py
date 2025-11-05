@@ -27,7 +27,7 @@ def create_map():
             "encoding": "terrarium", 
         }
     )
-    m.set_terrain(source="terrain_source", exaggeration=3) # 垂直誇張 3 倍
+    m.set_terrain(source="terrain_source", exaggeration=10) # 垂直誇張 10 倍
 
 
 
