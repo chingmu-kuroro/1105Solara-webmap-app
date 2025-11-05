@@ -33,7 +33,7 @@ def Page():
                 "encoding": "terrarium", 
             }
         )
-        m.set_terrain(source="terrain_source", exaggeration=1.0)
+        m.set_terrain(source="terrain_source", exaggeration=3)
         
         # --- 加入台北捷運路網 (向量) ---
         mrt_url = "https://drive.google.com/uc?id=1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
