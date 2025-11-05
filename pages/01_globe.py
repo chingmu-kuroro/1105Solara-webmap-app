@@ -1,5 +1,9 @@
+# pages/01_globe.py
+
 import solara
+# 保持樣板的原始匯入
 import leafmap.maplibregl as leafmap 
+from maplibre import Layer # ⬅️ 1. (新增) 我們需要手動匯入 Layer 物件
 
 @solara.component
 def Page():
@@ -7,7 +11,6 @@ def Page():
     @solara.use_memo
     def create_map():
         
-        # --- 2. 使用樣板的「輕量級」Map 物件 ---
         m = leafmap.Map(
             style="satellite",        
             center=[121.5654, 25.0330], # 台北 101
@@ -18,46 +21,48 @@ def Page():
             height="750px",
         )
 
-        # --- 3. (關鍵修正) 使用「手動」方式加入 3D 地形 ---
-        
-        # 這是 AWS 的免費地形圖磚 URL
+        # --- 加入 3D 地形 (這部分是正確的) ---
         aws_terrain_url = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
         
-        # 步驟 A：新增一個「來源 (Source)」
         m.add_source(
-            "terrain_source", # 給這個來源一個 ID
+            "terrain_source", 
             {
-                "type": "raster-dem", # 告訴 maplibre 這是 DEM 網格
+                "type": "raster-dem", 
                 "tiles": [aws_terrain_url],
                 "tileSize": 256,
-                "encoding": "terrarium", # 指定地形編碼
+                "encoding": "terrarium", 
             }
         )
+        m.set_terrain(source="terrain_source", exaggeration=1.0)
         
-        # 步驟 B：告訴地圖「使用」這個來源來設定 3D 地形
-        m.set_terrain(
-            source="terrain_source", # 使用我們剛剛定義的 ID
-            exaggeration=1.0 # 垂直誇張程度 (1.0 = 不誇張)
+        # --- 4. (關鍵修正) 手動加入台北捷運路網 ---
+        
+        mrt_url = "https://drive.google.com/uc?id=1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
+        paint = {"line-color": "#FFD700", "line-width": 3}
+        
+        # 步驟 A：新增 GeoJSON 資料「來源」
+        m.add_source(
+            "mrt_source", # 1. 給資料來源一個 ID
+            {"type": "geojson", "data": mrt_url} # 2. 告訴它資料在哪裡
         )
         
-        # --- 4. 加入台北捷運路網 (向量) ---
-        # 共用連結：https://drive.google.com/file/d/1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX/view?usp=sharing
-        # FILE_ID = "1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
-        # 原始 (Raw)檔案的 URL："https://drive.google.com/uc?id=1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
-        mrt_url = "https://drive.google.com/uc?id=1RwHIhfEINPFRYUCToMJzaOIEXLPNmZjX"
+        # 步驟 B：新增一個「圖層」來「繪製」這個來源
+        m.add_layer(
+            Layer(
+                id="mrt_layer",             # 1. 給圖層一個 ID
+                type="line",              # 2. 告訴它畫「線」
+                source="mrt_source",        # 3. 告訴它使用哪個「資料來源」
+                paint=paint               # 4. 告訴它如何畫 (顏色/寬度)
+            )
+        )
         
-        # (使用 add_geojson 是可以的，因為這個輕量物件也有這個輔助函式)
-        paint = {"line-color": "#FFD700", "line-width": 3}
-        m.add_geojson(
-            mrt_url, 
-            id="台北捷運路網", 
-            type="line",
-            paint=paint)
+        # (我們不再使用 m.add_geojson(...) 函式)
+        # ⬆️ ⬆️ ⬆️ 關鍵修正 ⬆️ ⬆️ ⬆️
 
         return m
     
-    # --- 5. 呼叫快取函式來取得地圖 ---
+    # --- 呼叫快取函式來取得地圖 ---
     m = create_map()
     
-    # --- 6. 保持樣板的原始渲染方式 ---
+    # --- 保持樣板的原始渲染方式 ---
     return m.to_solara()
