@@ -11,25 +11,24 @@ def Page():
     @solara.use_memo
     def create_split_map():
         
-        # --- 3. 建立左側 3D 地圖 (m1) ---
+        # --- 3. 建立左側 3D 視角地圖 (m1) ---
         m1 = leafmap.Map(
-            # ⬇️ ⬇️ ⬇️ 關鍵修正 ⬇️ ⬇️ ⬇️
-            basemap="Esri.WorldImagery",  # <-- 使用 "Esri.WorldImagery" 取代 "SATELLITE"
-            # ⬆️ ⬆️ ⬆️ 關鍵修正 ⬆️ ⬆️ ⬆️
+            basemap="Esri.WorldImagery",  # 使用 Esri 衛星圖
             center=[120.957, 23.470], # 玉山
             zoom=10,
-            pitch=60,                 # <-- ipyleaflet 也支援 pitch
+            pitch=60,                 # <-- ipyleaflet 支援 3D 傾斜視角
             layout_height="800px"
         )
-        # add_terrain() 是 ipyleflet 支援的函式
-        aws_terrain_url = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
-        m1.add_terrain(source=aws_terrain_url, layer_id="terrain")
+        
+        # ⬇️ ⬇️ ⬇️ 關鍵修正：刪除 m1.add_terrain(...) 這一行 ⬇️ ⬇️ ⬇️
+        # (因為 m1 是 ipyleaflet 物件，沒有這個方法)
+        # aws_terrain_url = "..."
+        # m1.add_terrain(source=aws_terrain_url, layer_id="terrain")
+        # ⬆️ ⬆️ ⬆️ 關鍵修正 ⬆️ ⬆️ ⬆️
 
         # --- 4. 建立右側 2D 地圖 (m2) ---
         m2 = leafmap.Map(
-            # ⬇️ ⬇️ ⬇️ 關鍵修正 ⬇️ ⬇️ ⬇️
-            basemap="OpenStreetMap", # <-- 使用 "OpenStreetMap" 取代 "CartoDB.Positron"
-            # ⬆️ ⬆️ ⬆️ 關鍵修正 ⬆️ ⬆️ ⬆️
+            basemap="OpenStreetMap", # 使用 OSM 街道圖
             center=[120.957, 23.470], # 玉山
             zoom=10,
             pitch=0, # <-- 設為 0 度 (2D)
@@ -39,7 +38,7 @@ def Page():
         # --- 5. 建立捲簾 (現在 m1 和 m2 都是 ipyleaflet 物件) ---
         split_control = leafmap.split_map(
             m1, m2,
-            left_label="3D 衛星地形 (Esri)",
+            left_label="3D 傾斜衛星圖 (Esri)",
             right_label="2D 街道圖 (OSM)"
         )
         
