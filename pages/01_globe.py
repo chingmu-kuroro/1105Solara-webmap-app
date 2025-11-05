@@ -12,7 +12,7 @@ def Page():
     def create_map():
         
         m = leafmap.Map(
-            style="satellite",        
+            style="CartoDB.DarkMatter",        
             center=[121.5654, 25.0330], # 台北 101
             zoom=11,                  
             pitch=50,                 
