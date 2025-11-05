@@ -48,7 +48,11 @@ def Page():
         
         # (使用 add_geojson 是可以的，因為這個輕量物件也有這個輔助函式)
         paint = {"line-color": "#FFD700", "line-width": 3}
-        m.add_geojson(mrt_url, layer_name="台北捷運路網", paint=paint)
+        m.add_geojson(
+            mrt_url, 
+            id="台北捷運路網", 
+            type="line",
+            paint=paint)
 
         return m
     
