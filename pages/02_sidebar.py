@@ -6,14 +6,30 @@ def create_map():
 
     m = leafmap.Map(
         style="liberty",
-        projection="globe",
+        #projection="globe",
+        center=[-122.19861, 46.21168], 
+        zoom=13, 
+        pitch=60, 
+        bearing=150, 
         height="750px",
-        zoom=2.5,
         sidebar_visible=True,
     )
 
     m.add_ee_layer(asset_id="ESA/WorldCover/v200", opacity=0.8)
-    m.add_overture_3d_buildings()
+
+    aws_terrain_url = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
+    m.add_source(
+        "terrain_source", 
+        {
+            "type": "raster-dem", 
+            "tiles": [aws_terrain_url],
+            "tileSize": 256,
+            "encoding": "terrarium", 
+        }
+    )
+    m.set_terrain(source="terrain_source", exaggeration=3) # 垂直誇張 3 倍
+
+
 
     m.add_legend_to_sidebar(
         builtin_legend="ESA_WorldCover", title="Land Cover Type", shape_type="rectangle"
