@@ -7,7 +7,7 @@ def create_map():
     m = leafmap.Map(
         style="liberty",
         #projection="globe",
-        center=[122.19861, 23.59333],  # 台東市
+        center=[-122.19861, 46.21168],  # Oregon MRT
         zoom=13, 
         pitch=60, 
         bearing=150, 
